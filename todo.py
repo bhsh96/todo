@@ -26,17 +26,24 @@ def show(page):
 def add(task):
     with open('/home/bhyung/Desktop/i/todo/list.txt','a') as f:
         f.write(task + "\n")
-
+        
 def edit(num):
-    num = int(num)
-    global list
-    print(list[num-1],end="")
-    new_task = input()
-    list[num-1] = new_task
+    try:
+        global list
+        num = int(num)
+        if num <= 0 or num > len(list):
+            raise ValueError()
+        print(list[num-1],end="")
+        new_task = input()
+        list[num-1] = new_task
 
-    with open('/home/bhyung/Desktop/i/todo/list.txt','w') as f:
-        for l in list:
-            f.write(l)
+        with open('/home/bhyung/Desktop/i/todo/list.txt','w') as f:
+            for l in list:
+                f.write(l)
+    except ValueError:
+        clear()
+        print("Please enter a valid number!\n")
+        return 1
 
 def remove(num):
     try:
@@ -86,7 +93,9 @@ def main():
             print("Edit task: ",end="")
             num = input()
             confirm()
-            edit(num)
+            result = edit(num)
+            if result == 1:
+                continue
 
         elif text == "c":
             print("Remove task: ",end="")
